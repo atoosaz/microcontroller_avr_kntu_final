@@ -44,11 +44,11 @@ bool enter_user;
 bool blink=false;
 bool admin_request;
 int pass;
-uint8_t temp_user;
-uint8_t count;
-uint8_t users[3];
-uint8_t i;
-uint8_t KeyboardPort=0;
+int temp_user;
+int count;
+int users[3];
+int i;
+int KeyboardPort=0;
 uint8_t candidate1=0;
 uint8_t candidate2=0;
 uint8_t candidate3=0;
@@ -259,7 +259,8 @@ lcd_init(20);
 #asm("sei")
 
     //start
-        //admin password is 1234 
+        //admin password is 1234   
+        //-----------------------------------------------------------admin login
         admin_pass=false;
         pass=0;         
         PORTD.0=0;     
@@ -282,7 +283,8 @@ lcd_init(20);
         puts("wrong password!\r");
         } 
         
-        }    
+        }
+        //------------------------------------------------user login    
         admin_request=true;
         while(admin_request){ 
             user=false;
@@ -435,7 +437,8 @@ lcd_init(20);
             blink=true; 
             PORTD.1=1;
             delay_ms(100);
-            PORTD.1=0;
+            PORTD.1=0;  
+            //-------------------------------------------------------voting
             lcd_puts("You can vote now"); 
             delay_ms(1000);
             lcd_clear();
@@ -495,16 +498,16 @@ lcd_init(20);
                             KeyboardPort=0;
                         }
                            
-                    }
-                    itoa(candidate1,print);   
-                    puts(print);
-                    puts(" 1 \r");
-                    itoa(candidate2,print);   
-                    puts(print);
-                    puts(" 2 \r");
-                    itoa(candidate3,print);   
-                    puts(print);
-                    puts(" 3 \r");   
+                    }   
+//                    itoa(candidate1,print);   
+//                    puts(print);
+//                    puts(" 1 \r");
+//                    itoa(candidate2,print);   
+//                    puts(print);
+//                    puts(" 2 \r");
+//                    itoa(candidate3,print);   
+//                    puts(print);
+//                    puts(" 3 \r");   
                     i++;
                 } 
                 blink=false ;
@@ -521,24 +524,32 @@ lcd_init(20);
             }
         
         }
-        
+        //-------------------------------------------------------showing resaults
         PORTD.0=0;  
         lcd_clear();
         lcd_puts("election finished"); 
         puts("\r election finished. to see resault type 'r': \r");
-        if(getchar()=='r'){
+        if(getchar()=='r'){  
+            lcd_clear();
+            lcd_puts("c1:"); 
             itoa(candidate1,print);
             puts("\rvotes for candidate 1:");
+            lcd_puts(print);
             puts(print);
-            puts("\r"); 
-            itoa(candidate2,print);
+            puts("\r");
+            lcd_puts(" c2:");  
+            itoa(candidate2,print);      
+            lcd_puts(print); 
             puts("votes for candidate 2:"); 
-            puts(print);
+            puts(print); 
+            lcd_puts(" c3:"); 
             puts("\r"); 
             itoa(candidate3,print);
+            lcd_puts(print); 
             puts("votes for candidate 3:"); 
             puts(print);
-            puts("\r");  
+            puts("\r");        
+            
         }
         
 }
